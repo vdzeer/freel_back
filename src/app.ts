@@ -7,7 +7,6 @@ import * as morgan from 'morgan'
 import * as cors from 'cors'
 import * as path from 'path'
 
-import { errorHandler } from './helpers'
 import { config } from './config'
 import router from './routes'
 
@@ -34,8 +33,6 @@ class App {
 
     this.mountRoutes()
     this.setupDB()
-
-    this.app.use(errorHandler)
   }
 
   private setupDB(): void {
