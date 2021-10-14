@@ -1,7 +1,7 @@
 export const config = {
   PORT: process.env.PORT || 5005,
-  HOST: process.env.PORT || 'http://',
-  FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5005',
+  HOST: process.env.PORT || 'https://',
+  FRONTEND_URL: process.env.FRONTEND_URL || 'https://freel-back.herokuapp.com/',
 
   ALLOWED_ORIGIN: process.env.ALLOWED_ORIGIN || 'http://localhost:5005/*;',
 
