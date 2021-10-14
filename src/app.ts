@@ -2,15 +2,15 @@ import * as rateLimit from 'express-rate-limit'
 import * as mongoose from 'mongoose'
 import * as express from 'express'
 // import * as helmet from 'helmet'
-import * as dotenv from 'dotenv'
-import * as morgan from 'morgan'
-import * as cors from 'cors'
-import * as path from 'path'
+// import * as dotenv from 'dotenv'
+// import * as morgan from 'morgan'
+// import * as cors from 'cors'
+// import * as path from 'path'
 
 import { config } from './config'
 import router from './routes'
 
-dotenv.config()
+// dotenv.config()
 
 const serverRequestLimit = rateLimit({
   windowMs: config.serverRateLimits.period,
@@ -21,12 +21,12 @@ class App {
   public readonly app: express.Application = express()
 
   constructor() {
-    ;(global as any).appRoot = path.resolve(process.cwd(), './')
+    // ;(global as any).appRoot = path.resolve(process.cwd(), './')
 
-    this.app.use(morgan('dev'))
+    // this.app.use(morgan('dev'))
     // this.app.use(helmet())
     this.app.use(serverRequestLimit)
-    this.app.use(cors())
+    // this.app.use(cors())
 
     this.app.use(express.json())
     this.app.use(express.urlencoded({ extended: true }))
@@ -66,7 +66,7 @@ class App {
     this.app.use('/', router)
     this.app.use(
       '/images',
-      express.static(path.resolve((global as any).appRoot, 'public')),
+      // express.static(path.resolve((global as any).appRoot, 'public')),
     )
   }
 }
