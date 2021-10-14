@@ -1,7 +1,7 @@
 import * as rateLimit from 'express-rate-limit'
 import * as mongoose from 'mongoose'
 import * as express from 'express'
-import * as helmet from 'helmet'
+// import * as helmet from 'helmet'
 import * as dotenv from 'dotenv'
 import * as morgan from 'morgan'
 import * as cors from 'cors'
@@ -24,7 +24,7 @@ class App {
     ;(global as any).appRoot = path.resolve(process.cwd(), './')
 
     this.app.use(morgan('dev'))
-    this.app.use(helmet())
+    // this.app.use(helmet())
     this.app.use(serverRequestLimit)
     this.app.use(cors())
 
