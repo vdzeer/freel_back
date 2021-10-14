@@ -18,7 +18,7 @@
   "author": "Vadim Dzerniuk",
   "license": "ISC",
   "engines": {
-    "node": "12.x"
+    "node": "11.x"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
