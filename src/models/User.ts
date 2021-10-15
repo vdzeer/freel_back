@@ -10,6 +10,10 @@ const User = new Schema<User>({
   status: { type: String, required: false },
   role: { type: String, required: true },
   spec: { type: String, required: false },
+  cash: { type: Number, required: true },
+  description: { type: String, required: false },
+  birthDay: { type: Date, required: false },
+  inWorkStatus: { type: Boolean, required: true },
 })
 
 export const UserModel = model('Users', User)

@@ -33,6 +33,10 @@ class authController {
 
       const user = await userService.createUser({
         ...req.body,
+        cash: 0,
+        birthDay: null,
+        description: null,
+        inWorkStatus: false,
         password: hashPassword,
       })
 
@@ -75,6 +79,7 @@ class authController {
       const token = generateAccessToken(candidate._id)
 
       res.json({
+        data: candidate,
         token,
       })
     } catch (err) {
@@ -99,6 +104,12 @@ class authController {
   async updateUserById(req, res, next) {
     try {
       await userService.updateUserByParams({ _id: req.user.id }, req.body)
+
+      // req.files
+      //   ? await productService.updateById(req.user.id, {
+      //       images: await req.file.copy(['product', product._id.toString()]),
+      //     })
+      //   : ''
 
       const updatedUser = await userService.findOneByParams({
         _id: req.user.id,
