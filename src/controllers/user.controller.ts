@@ -110,9 +110,14 @@ class authController {
         { _id: req.user.id },
         {
           ...req.body,
-          avatar: await req.file.copy(['users', req.user.id.toString()]),
         },
       )
+
+      req?.file &&
+        (await userService.updateUserByParams(
+          { _id: req.user.id },
+          { avatar: await req.file.copy(['users', req.user.id.toString()]) },
+        ))
 
       const updatedUser = await userService.findOneByParams({
         _id: req.user.id,
