@@ -14,6 +14,7 @@ const User = new Schema<User>({
   description: { type: String, required: false },
   birthDay: { type: Date, required: false },
   inWorkStatus: { type: Boolean, required: true },
+  createdAt: { type: Date, required: true },
 })
 
 export const UserModel = model('Users', User)

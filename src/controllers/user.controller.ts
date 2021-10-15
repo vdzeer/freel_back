@@ -37,6 +37,7 @@ class authController {
         birthDay: null,
         description: null,
         inWorkStatus: false,
+        createdAt: new Date(),
         password: hashPassword,
       })
 
