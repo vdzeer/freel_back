@@ -138,8 +138,6 @@ class authController {
 
       const user = await userService.findOneByParams({ _id: req.user.id })
 
-      console.log(req.body, user)
-
       const isPasswordEquals = await bcrypt.compare(oldPassword, user.password)
 
       if (!isPasswordEquals) {
