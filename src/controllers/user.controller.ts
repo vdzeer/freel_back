@@ -104,13 +104,13 @@ class authController {
 
   async updateUserById(req, res, next) {
     try {
-      await userService.updateUserByParams({ _id: req.user.id }, req.body)
-
-      // req.files
-      //   ? await productService.updateById(req.user.id, {
-      //       images: await req.file.copy(['product', product._id.toString()]),
-      //     })
-      //   : ''
+      await userService.updateUserByParams(
+        { _id: req.user.id },
+        {
+          ...req.body,
+          avatar: await req.file.copy(['users', req.user.id.toString()]),
+        },
+      )
 
       const updatedUser = await userService.findOneByParams({
         _id: req.user.id,

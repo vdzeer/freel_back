@@ -9,6 +9,9 @@ export type User = {
   role: string
   spec: string
   cash: number
-  birthDay: Date
+  birthDay: string
   description: string
+  createdAt: Date
+  avatar: string
+  inWorkStatus: boolean
 }

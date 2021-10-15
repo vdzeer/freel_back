@@ -12,9 +12,10 @@ const User = new Schema<User>({
   spec: { type: String, required: false },
   cash: { type: Number, required: true },
   description: { type: String, required: false },
-  birthDay: { type: Date, required: false },
+  birthDay: { type: String, required: false },
   inWorkStatus: { type: Boolean, required: true },
   createdAt: { type: Date, required: true },
+  avatar: { type: String, required: false },
 })
 
 export const UserModel = model('Users', User)
