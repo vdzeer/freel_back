@@ -34,8 +34,10 @@ class authController {
       const user = await userService.createUser({
         ...req.body,
         cash: 0,
+        city: '',
+        country: '',
         birthDay: null,
-        description: null,
+        description: '',
         inWorkStatus: false,
         createdAt: new Date(),
         password: hashPassword,

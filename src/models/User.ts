@@ -16,6 +16,8 @@ const User = new Schema<User>({
   inWorkStatus: { type: Boolean, required: true },
   createdAt: { type: Date, required: true },
   avatar: { type: String, required: false },
+  city: { type: String, required: true },
+  country: { type: String, required: true },
 })
 
 export const UserModel = model('Users', User)

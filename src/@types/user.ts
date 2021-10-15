@@ -14,4 +14,6 @@ export type User = {
   createdAt: Date
   avatar: string
   inWorkStatus: boolean
+  country: string
+  city: string
 }
