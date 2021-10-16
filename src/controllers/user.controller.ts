@@ -44,10 +44,12 @@ class authController {
         password: hashPassword,
       })
 
-      const token = generateAccessToken(user._id)
+      const newUser = await userService.findById(user._id)
+
+      const token = generateAccessToken(newUser._id)
 
       res.json({
-        data: { ...user, feedbacks: [] },
+        data: { ...newUser, feedbacks: [] },
         token,
       })
     } catch (err) {
