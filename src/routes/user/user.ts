@@ -8,8 +8,6 @@ import { fileLoaderService } from '../../services'
 
 const router = Router()
 
-router.get('/:id', UserController.getUserById)
-
 router.get('/getAll', UserController.getAllUsers)
 
 router.post(
@@ -31,5 +29,7 @@ router.post(
   checkIsValidFeedbackMiddleware,
   UserController.createFeedback,
 )
+
+router.get('/:id', UserController.getUserById)
 
 export const userRouter = router
