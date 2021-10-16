@@ -223,7 +223,8 @@ class authController {
 
       const newRate = user.feedbacks?.length
         ? (user.feedbacks.reduce((acc, el) => acc + el.rate, 0) + rate) /
-          user.feedbacks.length
+            user.feedbacks.length +
+          1
         : rate
 
       await userService.updateUserByParams({ _id: userId }, { rate: newRate })
