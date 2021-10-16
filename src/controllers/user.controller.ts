@@ -39,6 +39,7 @@ class authController {
         country: '',
         birthDay: null,
         description: '',
+        feedbacksLength: 0,
         inWorkStatus: false,
         createdAt: new Date(),
         password: hashPassword,
@@ -209,7 +210,10 @@ class authController {
         ? feedbacks.reduce((acc, el) => acc + el.rate, 0) / feedbacks.length
         : rate
 
-      await userService.updateUserByParams({ _id: userId }, { rate: newRate })
+      await userService.updateUserByParams(
+        { _id: userId },
+        { rate: newRate, feedbacksLength: feedbacks.length },
+      )
 
       res.send({
         status: 'ok',

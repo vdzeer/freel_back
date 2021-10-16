@@ -19,6 +19,7 @@ const User = new Schema<User>({
   avatar: { type: String, required: false },
   city: { type: String, required: false },
   country: { type: String, required: false },
+  feedbacksLength: { type: Number, required: false },
 })
 
 export const UserModel = model('Users', User)
