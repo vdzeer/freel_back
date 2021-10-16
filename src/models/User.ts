@@ -9,6 +9,7 @@ const User = new Schema<User>({
   phone: { type: String, unique: true, required: false },
   status: { type: String, required: false },
   role: { type: String, required: true },
+  rate: { type: Number, required: true },
   spec: { type: String, required: false },
   cash: { type: Number, required: true },
   description: { type: String, required: false },

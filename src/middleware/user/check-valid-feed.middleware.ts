@@ -20,15 +20,15 @@ export const checkIsValidFeedbackMiddleware = (
     )
   }
 
-  if (req.body.userId === req.user.id) {
-    return next(
-      new ErrorHandler(
-        StatusCodes.BAD_REQUEST,
-        errors.CANT_ADD_FEED_YOURSELF.message,
-        errors.CANT_ADD_FEED_YOURSELF.code,
-      ),
-    )
-  }
+  // if (req.body.userId === req.user.id) {
+  //   return next(
+  //     new ErrorHandler(
+  //       StatusCodes.BAD_REQUEST,
+  //       errors.CANT_ADD_FEED_YOURSELF.message,
+  //       errors.CANT_ADD_FEED_YOURSELF.code,
+  //     ),
+  //   )
+  // }
 
   next()
 }

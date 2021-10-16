@@ -34,6 +34,7 @@ class authController {
       const user = await userService.createUser({
         ...req.body,
         cash: 0,
+        rate: 0,
         city: '',
         country: '',
         birthDay: null,
@@ -217,6 +218,15 @@ class authController {
         userId,
         rate,
       })
+
+      const user = await userService.findById(userId)
+
+      const newRate = user.feedbacks?.length
+        ? (user.feedbacks.reduce((acc, el) => acc + el.rate, 0) + rate) /
+          user.feedbacks.length
+        : rate
+
+      await userService.updateUserByParams({ _id: userId }, { rate: newRate })
 
       res.send({
         status: 'ok',

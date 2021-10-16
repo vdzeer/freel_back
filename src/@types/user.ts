@@ -18,5 +18,6 @@ export type User = {
   inWorkStatus: boolean
   country: string
   city: string
+  rate: number
   feedbacks: Array<TFeedback>
 }
