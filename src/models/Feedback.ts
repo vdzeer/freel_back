@@ -2,13 +2,13 @@ import { TFeedback } from './../@types/feedback'
 import { Schema, model, Types } from 'mongoose'
 
 const Feedback = new Schema<TFeedback>({
-  customerId: {
+  customer: {
     type: Types.ObjectId,
-    ref: 'users',
+    ref: 'Users',
   },
   userId: {
     type: Types.ObjectId,
-    ref: 'users',
+    ref: 'Users',
   },
   description: { type: String, required: false },
   rate: { type: Number, required: true },

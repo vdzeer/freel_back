@@ -8,7 +8,7 @@ class FeedbackService {
   }
 
   findAllByUserId(params: Partial<TFeedback>): Promise<TFeedback[]> {
-    return FeedbackModel.find(params).lean().exec()
+    return FeedbackModel.find(params).populate('customer').lean().exec()
   }
 }
 

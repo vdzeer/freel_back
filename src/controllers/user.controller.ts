@@ -88,18 +88,8 @@ class authController {
         userId: candidate._id,
       })
 
-      const feedbacksWithCustomerInfo = await Promise.all(
-        feedbacks.map(async el => {
-          const customer = await userService.findById(el.customerId)
-          return {
-            ...el,
-            customer,
-          }
-        }),
-      )
-
       res.json({
-        data: { ...candidate, feedbacks: feedbacksWithCustomerInfo },
+        data: { ...candidate, feedbacks },
         token,
       })
     } catch (err) {
@@ -116,19 +106,9 @@ class authController {
         userId: user._id,
       })
 
-      const feedbacksWithCustomerInfo = await Promise.all(
-        feedbacks.map(async el => {
-          const customer = await userService.findById(el.customerId)
-          return {
-            ...el,
-            customer,
-          }
-        }),
-      )
-
       res.send({
         status: 'ok',
-        data: { ...user, feedbacks: feedbacksWithCustomerInfo },
+        data: { ...user, feedbacks },
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))
@@ -214,19 +194,19 @@ class authController {
       const { userId, description, rate } = req.body
 
       const feedback = await feedbackService.createFeedback({
-        customerId: req.user.id,
+        customer: req.user.id,
         createdAt: new Date(),
         description,
         userId,
         rate,
       })
 
-      const user = await userService.findById(userId)
+      const feedbacks = await feedbackService.findAllByUserId({
+        userId: userId,
+      })
 
-      const newRate = user.feedbacks?.length
-        ? (user.feedbacks.reduce((acc, el) => acc + el.rate, 0) + rate) /
-            user.feedbacks.length +
-          1
+      const newRate = feedbacks?.length
+        ? feedbacks.reduce((acc, el) => acc + el.rate, 0) / feedbacks.length
         : rate
 
       await userService.updateUserByParams({ _id: userId }, { rate: newRate })

@@ -1,5 +1,5 @@
 export type TFeedback = {
-  customerId: string
+  customer: string
   userId: string
   description: string
   rate: number
