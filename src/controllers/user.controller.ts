@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes'
 import * as bcrypt from 'bcrypt'
 import { ErrorHandler, errors } from '../errors'
-import { userService } from '../services'
+import { feedbackService, userService } from '../services'
 import { config } from '../config'
 
 const jwt = require('jsonwebtoken')
@@ -46,7 +46,7 @@ class authController {
       const token = generateAccessToken(user._id)
 
       res.json({
-        data: user,
+        data: { ...user, feedbacks: [] },
         token,
       })
     } catch (err) {
@@ -81,8 +81,22 @@ class authController {
       }
       const token = generateAccessToken(candidate._id)
 
+      const feedbacks = await feedbackService.findAllByUserId({
+        userId: candidate._id,
+      })
+
+      const feedbacksWithCustomerInfo = await Promise.all(
+        feedbacks.map(async el => {
+          const customer = await userService.findById(el.customerId)
+          return {
+            ...el,
+            customer,
+          }
+        }),
+      )
+
       res.json({
-        data: candidate,
+        data: { ...candidate, feedbacks: feedbacksWithCustomerInfo },
         token,
       })
     } catch (err) {
@@ -95,9 +109,36 @@ class authController {
       const { id } = req.params
       const user = await userService.findById(id)
 
+      const feedbacks = await feedbackService.findAllByUserId({
+        userId: user._id,
+      })
+
+      const feedbacksWithCustomerInfo = await Promise.all(
+        feedbacks.map(async el => {
+          const customer = await userService.findById(el.customerId)
+          return {
+            ...el,
+            customer,
+          }
+        }),
+      )
+
       res.send({
         status: 'ok',
-        data: user,
+        data: { ...user, feedbacks: feedbacksWithCustomerInfo },
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async getAllUsers(req, res, next) {
+    try {
+      const users = await userService.findAll()
+
+      res.send({
+        status: 'ok',
+        data: users,
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))
@@ -162,6 +203,27 @@ class authController {
       })
     } catch (err) {
       return next(new ErrorHandler(err.status, err?.code, err?.message))
+    }
+  }
+
+  async createFeedback(req, res, next) {
+    try {
+      const { userId, description, rate } = req.body
+
+      const feedback = await feedbackService.createFeedback({
+        customerId: req.user.id,
+        createdAt: new Date(),
+        description,
+        userId,
+        rate,
+      })
+
+      res.send({
+        status: 'ok',
+        data: feedback,
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
     }
   }
 }

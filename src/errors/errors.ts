@@ -19,6 +19,10 @@ export const errors = {
     message: 'Password is not equal',
     code: 'PASSWORD_IS_NOT_EQUAL',
   },
+  CANT_ADD_FEED_YOURSELF: {
+    message: "Can't add feedback to yourself",
+    code: 'CANT_ADD_FEED_YOURSELF',
+  },
   //401
   UNAUTHORIZED_BAD_TOKEN: {
     message: 'Something wrong with token',

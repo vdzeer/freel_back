@@ -1,3 +1,5 @@
+import { TFeedback } from './feedback'
+
 export type User = {
   _id: string
   name: string
@@ -16,4 +18,5 @@ export type User = {
   inWorkStatus: boolean
   country: string
   city: string
+  feedbacks: Array<TFeedback>
 }

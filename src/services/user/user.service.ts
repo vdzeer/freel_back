@@ -16,7 +16,7 @@ class UserService {
   }
 
   findOneByParams(findObject: Partial<User>): Promise<User | null> {
-    return UserModel.findOne(findObject).exec()
+    return UserModel.findOne(findObject).lean().exec()
   }
 
   findAll(skip?, limit?): Promise<User[]> {
@@ -24,7 +24,7 @@ class UserService {
   }
 
   findById(id: string, skip?, limit?): Promise<User> {
-    return UserModel.findById(id).exec()
+    return UserModel.findById(id).lean().exec()
   }
 }
 
