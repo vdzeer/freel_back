@@ -8,7 +8,7 @@ export type User = {
   phone: string
   status: string
   password: string
-  role: string
+  role: 'customer' | 'worker'
   spec: string
   cash: number
   birthDay: string

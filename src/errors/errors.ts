@@ -23,6 +23,14 @@ export const errors = {
     message: "Can't add feedback to yourself",
     code: 'CANT_ADD_FEED_YOURSELF',
   },
+  MUST_BE_CUSTOMER: {
+    message: 'User must be a customer',
+    code: 'MUST_BE_CUSTOMER',
+  },
+  ORDER_NOT_YOUR: {
+    message: 'This order is not your',
+    code: 'ORDER_NOT_YOUR',
+  },
   //401
   UNAUTHORIZED_BAD_TOKEN: {
     message: 'Something wrong with token',
@@ -33,9 +41,9 @@ export const errors = {
     message: 'User not found',
     code: 'USER_NOT_FOUND',
   },
-  ADMIN_NOT_FOUND: {
-    message: 'Admin not found',
-    code: 'ADMIN_NOT_FOUND',
+  ORDER_NOT_FOUNT: {
+    message: 'Order not found',
+    code: 'ORDER_NOT_FOUNT',
   },
   ADMIN_EMAIL_NOT_FOUND: {
     message: 'Admin with such email not found',

@@ -8,7 +8,7 @@ const User = new Schema<User>({
   email: { type: String, unique: true, required: true },
   phone: { type: String, unique: true, required: false },
   status: { type: String, required: false },
-  role: { type: String, required: true },
+  role: { type: String, enum: ['customer', 'worker'], required: true },
   rate: { type: Number, required: true },
   spec: { type: String, required: false },
   cash: { type: Number, required: true },
