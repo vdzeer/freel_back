@@ -77,6 +77,7 @@ class orderController {
         createdAt: new Date(),
         responses: [],
         executor: null,
+        active: true,
         views: 0,
         ...req.body,
       })
@@ -190,7 +191,9 @@ class orderController {
         )
       }
 
-      if (order.customer !== req.body.id) {
+      console.log(order.customer, req.user.id, order.customer != req.user.id)
+
+      if (order.customer != req.user.id) {
         return next(
           new ErrorHandler(
             StatusCodes.BAD_REQUEST,
@@ -228,7 +231,7 @@ class orderController {
         )
       }
 
-      if (order.customer !== req.body.id) {
+      if (order.customer != req.user.id) {
         return next(
           new ErrorHandler(
             StatusCodes.BAD_REQUEST,

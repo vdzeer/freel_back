@@ -1,4 +1,4 @@
-import { UpdateWriteOpResult } from 'mongoose'
+import { Types, UpdateWriteOpResult } from 'mongoose'
 import { TOrder } from '../../@types'
 import { OrderModel } from '../../models'
 
@@ -10,6 +10,13 @@ class OrderService {
 
   findAll(skip?, limit?): Promise<TOrder[]> {
     return OrderModel.find({ active: true }).populate('customer').lean().exec()
+  }
+
+  findYourself(customerId, skip?, limit?): Promise<TOrder[]> {
+    return OrderModel.find({ customer: customerId })
+      .populate('customer')
+      .lean()
+      .exec()
   }
 
   updateOrderByParams(

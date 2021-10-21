@@ -1,8 +1,9 @@
 import { StatusCodes } from 'http-status-codes'
 import * as bcrypt from 'bcrypt'
 import { ErrorHandler, errors } from '../errors'
-import { feedbackService, userService } from '../services'
+import { feedbackService, orderService, userService } from '../services'
 import { config } from '../config'
+import { Types } from 'mongoose'
 
 const jwt = require('jsonwebtoken')
 
@@ -50,7 +51,7 @@ class authController {
       const token = generateAccessToken(newUser._id)
 
       res.json({
-        data: { ...newUser, feedbacks: [] },
+        data: { ...newUser, feedbacks: [], orders: [] },
         token,
       })
     } catch (err) {
@@ -89,8 +90,10 @@ class authController {
         userId: candidate._id,
       })
 
+      const orders = await orderService.findYourself(candidate._id)
+
       res.json({
-        data: { ...candidate, feedbacks },
+        data: { ...candidate, feedbacks, orders },
         token,
       })
     } catch (err) {
@@ -107,9 +110,11 @@ class authController {
         userId: user._id,
       })
 
+      const orders = await orderService.findYourself(user._id)
+
       res.send({
         status: 'ok',
-        data: { ...user, feedbacks },
+        data: { ...user, feedbacks, orders },
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))
