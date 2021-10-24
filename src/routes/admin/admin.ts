@@ -7,7 +7,7 @@ const router = Router()
 
 router.get('/get-all-users', AdminController.getAllUsers)
 
-router.get('/get-all-orders', AdminController.getAllOrders)
+router.get('/get-all-orders/:reverse?', AdminController.getAllOrders)
 
 router.post(
   '/confirm-order',

@@ -208,6 +208,8 @@ class adminController {
 
   async getAllOrders(req, res, next) {
     try {
+      const { reverse } = req.params
+
       const activeOrders = await orderService.findAll()
 
       const unconfirmedOrders = await orderService.findUnconfirmed()
@@ -217,9 +219,11 @@ class adminController {
       res.send({
         status: 'ok',
         data: {
-          activeOrders,
-          unconfirmedOrders,
-          archivedOrders,
+          activeOrders: reverse ? activeOrders.reverse() : activeOrders,
+          unconfirmedOrders: reverse
+            ? unconfirmedOrders.reverse()
+            : unconfirmedOrders,
+          archivedOrders: reverse ? archivedOrders.reverse() : archivedOrders,
         },
       })
     } catch (err) {
@@ -233,6 +237,7 @@ class adminController {
         { _id: req.body.id },
         {
           confirmed: true,
+          createdAt: new Date(),
         },
       )
 
