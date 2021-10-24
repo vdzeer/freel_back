@@ -136,6 +136,21 @@ class authController {
     }
   }
 
+  async getBestUsers(req, res, next) {
+    try {
+      const users = await userService.findAll()
+
+      res.send({
+        status: 'ok',
+        data: users
+          .sort((a, b) => Number(b.rate) - Number(a.rate))
+          .slice(0, 10),
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
   async updateUserById(req, res, next) {
     try {
       await userService.updateUserByParams(

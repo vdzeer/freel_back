@@ -9,6 +9,7 @@ import { fileLoaderService } from '../../services'
 const router = Router()
 
 router.get('/getAll', UserController.getAllUsers)
+router.get('/get-best', UserController.getBestUsers)
 
 router.post(
   '/update',
