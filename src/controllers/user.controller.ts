@@ -39,6 +39,7 @@ class authController {
         city: '',
         country: '',
         birthDay: null,
+        blocked: false,
         description: '',
         feedbacksLength: 0,
         inWorkStatus: false,

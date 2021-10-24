@@ -20,6 +20,7 @@ const User = new Schema<User>({
   city: { type: String, required: false },
   country: { type: String, required: false },
   feedbacksLength: { type: Number, required: false },
+  blocked: { type: Boolean, required: true },
 })
 
 export const UserModel = model('Users', User)

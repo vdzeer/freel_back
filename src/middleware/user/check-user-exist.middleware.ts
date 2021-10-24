@@ -22,6 +22,16 @@ export const checkIsUserExistMiddleware = async (
     )
   }
 
+  if (userByPhone.blocked) {
+    return next(
+      new ErrorHandler(
+        StatusCodes.NOT_FOUND,
+        errors.USER_BLOCKED.message,
+        errors.USER_BLOCKED.code,
+      ),
+    )
+  }
+
   req.user = userByPhone
   next()
 }

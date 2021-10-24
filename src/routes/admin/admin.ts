@@ -11,25 +11,19 @@ router.post(
   '/update-user',
   fileLoaderService.file('avatar', /image\/(png|jpeg|giff)/, false),
   checkAccessTokenMiddleware,
-  UserController.updateUserById,
+  AdminController.updateUserById,
 )
 
 router.post(
   '/update-user-password',
   checkAccessTokenMiddleware,
-  UserController.changePassword,
+  AdminController.changePassword,
 )
 
 router.post(
-  '/block-user',
+  '/block-unblock-user',
   checkAccessTokenMiddleware,
-  UserController.createFeedback,
-)
-
-router.post(
-  '/change-user-premium',
-  checkAccessTokenMiddleware,
-  UserController.createFeedback,
+  AdminController.blockUnblockUser,
 )
 
 router.get('/user/:id', UserController.getUserById)

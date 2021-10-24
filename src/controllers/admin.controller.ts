@@ -107,100 +107,73 @@ class adminController {
     }
   }
 
-  // async updateUserById(req, res, next) {
-  //   try {
-  //     await userService.updateUserByParams(
-  //       { _id: req.user.id },
-  //       {
-  //         ...req.body,
-  //       },
-  //     )
+  async updateUserById(req, res, next) {
+    try {
+      const { id, ...other } = req.body
 
-  //     req?.file &&
-  //       (await userService.updateUserByParams(
-  //         { _id: req.user.id },
-  //         { avatar: await req.file.copy(['users', req.user.id.toString()]) },
-  //       ))
+      await userService.updateUserByParams(
+        { _id: id },
+        {
+          ...other,
+        },
+      )
 
-  //     const updatedUser = await userService.findOneByParams({
-  //       _id: req.user.id,
-  //     })
+      req?.file &&
+        (await userService.updateUserByParams(
+          { _id: id },
+          { avatar: await req.file.copy(['users', id.toString()]) },
+        ))
 
-  //     res.send({
-  //       status: 'ok',
-  //       data: updatedUser,
-  //     })
-  //   } catch (err) {
-  //     return next(new ErrorHandler(err?.status, err?.code, err?.message))
-  //   }
-  // }
+      const updatedUser = await userService.findOneByParams({
+        _id: id,
+      })
 
-  // async changePassword(req, res, next) {
-  //   try {
-  //     const { oldPassword, password } = req.body
+      res.send({
+        status: 'ok',
+        data: updatedUser,
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
 
-  //     const user = await userService.findOneByParams({ _id: req.user.id })
+  async changePassword(req, res, next) {
+    try {
+      const { password, id } = req.body
 
-  //     const isPasswordEquals = await bcrypt.compare(oldPassword, user.password)
+      const hashPassword = await bcrypt.hash(password, 7)
 
-  //     if (!isPasswordEquals) {
-  //       return next(
-  //         new ErrorHandler(
-  //           StatusCodes.BAD_REQUEST,
-  //           errors.PASSWORD_IS_NOT_EQUAL.message,
-  //           errors.PASSWORD_IS_NOT_EQUAL.code,
-  //         ),
-  //       )
-  //     }
+      await userService.updateUserByParams(
+        { _id: id },
+        { password: hashPassword },
+      )
 
-  //     const hashPassword = await bcrypt.hash(password, 7)
+      res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err.status, err?.code, err?.message))
+    }
+  }
 
-  //     await userService.updateUserByParams(
-  //       { _id: req.user.id },
-  //       { password: hashPassword },
-  //     )
+  async blockUnblockUser(req, res, next) {
+    try {
+      const { id } = req.body
 
-  //     res.send({
-  //       status: 'ok',
-  //     })
-  //   } catch (err) {
-  //     return next(new ErrorHandler(err.status, err?.code, err?.message))
-  //   }
-  // }
+      const user = await userService.findById(id)
 
-  // async createFeedback(req, res, next) {
-  //   try {
-  //     const { userId, description, rate } = req.body
+      await userService.updateUserByParams(
+        { _id: id },
+        { blocked: !user.blocked ?? true },
+      )
 
-  //     const feedback = await feedbackService.createFeedback({
-  //       customer: req.user.id,
-  //       createdAt: new Date(),
-  //       description,
-  //       userId,
-  //       rate,
-  //     })
-
-  //     const feedbacks = await feedbackService.findAllByUserId({
-  //       userId: userId,
-  //     })
-
-  //     const newRate = feedbacks?.length
-  //       ? feedbacks.reduce((acc, el) => acc + el.rate, 0) / feedbacks.length
-  //       : rate
-
-  //     await userService.updateUserByParams(
-  //       { _id: userId },
-  //       { rate: newRate, feedbacksLength: feedbacks.length },
-  //     )
-
-  //     res.send({
-  //       status: 'ok',
-  //       data: feedback,
-  //     })
-  //   } catch (err) {
-  //     return next(new ErrorHandler(err?.status, err?.code, err?.message))
-  //   }
-  // }
+      res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
 }
 
 export const AdminController = new adminController()

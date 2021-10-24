@@ -31,6 +31,11 @@ export const errors = {
     message: 'This order is not your',
     code: 'ORDER_NOT_YOUR',
   },
+  USER_BLOCKED: {
+    message: 'This user is blocked',
+    code: 'USER_BLOCKED',
+  },
+
   //401
   UNAUTHORIZED_BAD_TOKEN: {
     message: 'Something wrong with token',
