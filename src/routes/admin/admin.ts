@@ -56,6 +56,18 @@ router.post(
   AdminController.deleteUser,
 )
 
+router.post(
+  '/set-order-query',
+  checkAccessTokenMiddleware,
+  AdminController.setOrderQuery,
+)
+
+router.post(
+  '/set-info-page',
+  checkAccessTokenMiddleware,
+  AdminController.setInfoPageQuery,
+)
+
 router.get('/user/:id', UserController.getUserById)
 
 router.get('/order/:id', OrderController.getOrderById)

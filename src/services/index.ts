@@ -1,3 +1,4 @@
+export * from './enum.service'
 export * from './file-loader'
 export * from './feedback'
 export * from './admin'

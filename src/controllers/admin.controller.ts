@@ -2,13 +2,12 @@ import { StatusCodes } from 'http-status-codes'
 import * as bcrypt from 'bcrypt'
 import { ErrorHandler, errors } from '../errors'
 import {
-  feedbackService,
+  enumService,
   orderService,
   adminService,
   userService,
 } from '../services'
 import { config } from '../config'
-import { Types } from 'mongoose'
 
 const jwt = require('jsonwebtoken')
 
@@ -219,11 +218,27 @@ class adminController {
       res.send({
         status: 'ok',
         data: {
-          activeOrders: reverse ? activeOrders.reverse() : activeOrders,
+          activeOrders: reverse
+            ? activeOrders.reverse().sort((a, b) => {
+                return Number(a.garant) - Number(b.garant)
+              })
+            : activeOrders.sort((a, b) => {
+                return Number(a.garant) - Number(b.garant)
+              }),
           unconfirmedOrders: reverse
-            ? unconfirmedOrders.reverse()
-            : unconfirmedOrders,
-          archivedOrders: reverse ? archivedOrders.reverse() : archivedOrders,
+            ? unconfirmedOrders.reverse().sort((a, b) => {
+                return Number(a.garant) - Number(b.garant)
+              })
+            : unconfirmedOrders.sort((a, b) => {
+                return Number(a.garant) - Number(b.garant)
+              }),
+          archivedOrders: reverse
+            ? archivedOrders.reverse().sort((a, b) => {
+                return Number(a.garant) - Number(b.garant)
+              })
+            : archivedOrders.sort((a, b) => {
+                return Number(a.garant) - Number(b.garant)
+              }),
         },
       })
     } catch (err) {
@@ -238,6 +253,48 @@ class adminController {
         {
           confirmed: true,
           createdAt: new Date(),
+        },
+      )
+
+      res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async setOrderQuery(req, res, next) {
+    try {
+      const ordersQuery = await enumService.findOneByParams({
+        name: 'ordersQuery',
+      })
+
+      await enumService.updateByParams(
+        { name: 'ordersQuery' },
+        {
+          value: { ...ordersQuery.value, [req.body.place]: req.body.id },
+        },
+      )
+
+      res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async setInfoPageQuery(req, res, next) {
+    try {
+      const ordersQuery = await enumService.findOneByParams({
+        name: 'infoPages',
+      })
+
+      await enumService.updateByParams(
+        { name: 'infoPages' },
+        {
+          value: { ...ordersQuery.value, [req.body.page]: req.body.text },
         },
       )
 
