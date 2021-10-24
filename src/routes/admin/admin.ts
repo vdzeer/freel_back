@@ -7,6 +7,20 @@ const router = Router()
 
 router.get('/get-all-users', AdminController.getAllUsers)
 
+router.get('/get-all-orders', AdminController.getAllOrders)
+
+router.post(
+  '/confirm-order',
+  checkAccessTokenMiddleware,
+  AdminController.confirmOrder,
+)
+
+router.post(
+  '/delete-order',
+  checkAccessTokenMiddleware,
+  AdminController.deleteOrder,
+)
+
 router.post(
   '/update-user',
   fileLoaderService.file('avatar', /image\/(png|jpeg|giff)/, false),

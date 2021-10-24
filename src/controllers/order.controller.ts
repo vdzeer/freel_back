@@ -77,6 +77,7 @@ class orderController {
         createdAt: new Date(),
         responses: [],
         executor: null,
+        confirmed: false,
         active: true,
         views: 0,
         ...req.body,

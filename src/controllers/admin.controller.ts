@@ -205,6 +205,56 @@ class adminController {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))
     }
   }
+
+  async getAllOrders(req, res, next) {
+    try {
+      const activeOrders = await orderService.findAll()
+
+      const unconfirmedOrders = await orderService.findUnconfirmed()
+
+      const archivedOrders = await orderService.findArchive()
+
+      res.send({
+        status: 'ok',
+        data: {
+          activeOrders,
+          unconfirmedOrders,
+          archivedOrders,
+        },
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async confirmOrder(req, res, next) {
+    try {
+      await orderService.updateOrderByParams(
+        { _id: req.body.id },
+        {
+          confirmed: true,
+        },
+      )
+
+      res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async deleteOrder(req, res, next) {
+    try {
+      await orderService.deleteOrder(req.body.id)
+
+      res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
 }
 
 export const AdminController = new adminController()

@@ -22,6 +22,7 @@ const Order = new Schema<TOrder>({
   views: { type: Number, required: true },
   responses: { type: Array, required: false },
   active: { type: Boolean, required: true },
+  confirmed: { type: Boolean, required: true },
 })
 
 export const OrderModel = model('Orders', Order)

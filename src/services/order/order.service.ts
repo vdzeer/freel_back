@@ -9,7 +9,21 @@ class OrderService {
   }
 
   findAll(skip?, limit?): Promise<TOrder[]> {
-    return OrderModel.find({ active: true }).populate('customer').lean().exec()
+    return OrderModel.find({ active: true, confirmed: true })
+      .populate('customer')
+      .lean()
+      .exec()
+  }
+
+  findUnconfirmed(skip?, limit?): Promise<TOrder[]> {
+    return OrderModel.find({ confirmed: false })
+      .populate('customer')
+      .lean()
+      .exec()
+  }
+
+  findArchive(skip?, limit?): Promise<TOrder[]> {
+    return OrderModel.find({ active: false }).populate('customer').lean().exec()
   }
 
   findYourself(customerId, skip?, limit?): Promise<TOrder[]> {

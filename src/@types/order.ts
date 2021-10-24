@@ -14,4 +14,5 @@ export type TOrder = {
   views: number
   responses: Array<any>
   active: boolean
+  confirmed: boolean
 }
