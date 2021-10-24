@@ -10,6 +10,7 @@ const router = Router()
 
 router.get('/getAll', UserController.getAllUsers)
 router.get('/get-best', UserController.getBestUsers)
+router.get('/get-enums', UserController.getEnums)
 
 router.post(
   '/update',

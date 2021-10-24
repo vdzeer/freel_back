@@ -1,7 +1,12 @@
 import { StatusCodes } from 'http-status-codes'
 import * as bcrypt from 'bcrypt'
 import { ErrorHandler, errors } from '../errors'
-import { feedbackService, orderService, userService } from '../services'
+import {
+  enumService,
+  feedbackService,
+  orderService,
+  userService,
+} from '../services'
 import { config } from '../config'
 import { Types } from 'mongoose'
 
@@ -145,6 +150,23 @@ class authController {
         data: users
           .sort((a, b) => Number(b.rate) - Number(a.rate))
           .slice(0, 10),
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async getEnums(req, res, next) {
+    try {
+      const categories = await enumService.findOneByParams({
+        name: 'categories',
+      })
+      const maxPrice = await enumService.findOneByParams({ name: 'maxPrice' })
+      const pages = await enumService.findOneByParams({ name: 'infoPages' })
+
+      res.send({
+        status: 'ok',
+        data: { categories, maxPrice, pages },
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))
