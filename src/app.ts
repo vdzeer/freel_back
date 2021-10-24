@@ -33,7 +33,6 @@ class App {
     this.app.use(express.urlencoded({ extended: true }))
 
     this.mountRoutes()
-    this.app.use(express.static('public/users'))
     this.setupDB()
 
     this.app.use(errorHandler)
