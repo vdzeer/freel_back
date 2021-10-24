@@ -98,27 +98,19 @@ class adminController {
     try {
       const users = await userService.findAll()
 
-      const orders = []
-
       const getOwnOrders = async item => {
         return await orderService.findYourself(item)
       }
 
       const getData = async () => {
-        return Promise.all(
-          users.map(item =>
-            getOwnOrders(item._id).then(data => {
-              orders.push(data.length ?? 0)
-            }),
-          ),
-        )
+        return Promise.all(users.map(item => getOwnOrders(item._id)))
       }
 
       getData().then(data => {
         const usersList = users.map((el, index) => {
           return {
             ...el,
-            ordersLength: orders[index],
+            ordersLength: data[index].length,
           }
         })
 
