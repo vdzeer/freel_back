@@ -1,4 +1,5 @@
 export * from './file-loader'
 export * from './feedback'
+export * from './admin'
 export * from './order'
 export * from './user'
