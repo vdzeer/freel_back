@@ -191,8 +191,6 @@ class orderController {
         )
       }
 
-      console.log(order.customer, req.user.id, order.customer != req.user.id)
-
       if (order.customer != req.user.id) {
         return next(
           new ErrorHandler(

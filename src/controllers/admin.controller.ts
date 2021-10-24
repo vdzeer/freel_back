@@ -1,7 +1,12 @@
 import { StatusCodes } from 'http-status-codes'
 import * as bcrypt from 'bcrypt'
 import { ErrorHandler, errors } from '../errors'
-import { feedbackService, orderService, adminService } from '../services'
+import {
+  feedbackService,
+  orderService,
+  adminService,
+  userService,
+} from '../services'
 import { config } from '../config'
 import { Types } from 'mongoose'
 
@@ -89,18 +94,18 @@ class adminController {
     }
   }
 
-  // async getAllUsers(req, res, next) {
-  //   try {
-  //     const users = await userService.findAll()
+  async getAllUsers(req, res, next) {
+    try {
+      const users = await userService.findAll()
 
-  //     res.send({
-  //       status: 'ok',
-  //       data: users,
-  //     })
-  //   } catch (err) {
-  //     return next(new ErrorHandler(err?.status, err?.code, err?.message))
-  //   }
-  // }
+      res.send({
+        status: 'ok',
+        data: users,
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
 
   // async updateUserById(req, res, next) {
   //   try {
