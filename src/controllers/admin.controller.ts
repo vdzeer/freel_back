@@ -98,9 +98,34 @@ class adminController {
     try {
       const users = await userService.findAll()
 
-      res.send({
-        status: 'ok',
-        data: users,
+      const orders = []
+
+      const getOwnOrders = async item => {
+        return await orderService.findYourself(item)
+      }
+
+      const getData = async () => {
+        return Promise.all(
+          users.map(item =>
+            getOwnOrders(item._id).then(data => {
+              orders.push(data.length ?? 0)
+            }),
+          ),
+        )
+      }
+
+      getData().then(data => {
+        const usersList = users.map((el, index) => {
+          return {
+            ...el,
+            ordersLength: orders[index],
+          }
+        })
+
+        res.send({
+          status: 'ok',
+          data: usersList,
+        })
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))
@@ -166,6 +191,20 @@ class adminController {
         { _id: id },
         { blocked: !user.blocked ?? true },
       )
+
+      res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async deleteUser(req, res, next) {
+    try {
+      const { id } = req.body
+
+      await userService.deleteById(id)
 
       res.send({
         status: 'ok',

@@ -26,6 +26,12 @@ router.post(
   AdminController.blockUnblockUser,
 )
 
+router.post(
+  '/delete-user',
+  checkAccessTokenMiddleware,
+  AdminController.deleteUser,
+)
+
 router.get('/user/:id', UserController.getUserById)
 
 export const adminRouter = router

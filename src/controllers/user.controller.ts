@@ -42,6 +42,7 @@ class authController {
         blocked: false,
         description: '',
         feedbacksLength: 0,
+        premiumStatus: null,
         inWorkStatus: false,
         createdAt: new Date(),
         password: hashPassword,

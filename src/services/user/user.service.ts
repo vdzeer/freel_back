@@ -20,11 +20,15 @@ class UserService {
   }
 
   findAll(skip?, limit?): Promise<User[]> {
-    return UserModel.find().exec()
+    return UserModel.find().lean().exec()
   }
 
   findById(id: string, skip?, limit?): Promise<User> {
     return UserModel.findById(id).lean().exec()
+  }
+
+  deleteById(id: string, skip?, limit?): Promise<User> {
+    return UserModel.remove({ _id: id })
   }
 }
 

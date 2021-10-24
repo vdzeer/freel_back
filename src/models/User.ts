@@ -21,6 +21,11 @@ const User = new Schema<User>({
   country: { type: String, required: false },
   feedbacksLength: { type: Number, required: false },
   blocked: { type: Boolean, required: true },
+  premiumStatus: {
+    type: String,
+    enum: ['1', '2', '3'],
+    required: false,
+  },
 })
 
 export const UserModel = model('Users', User)
