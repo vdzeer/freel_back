@@ -166,7 +166,11 @@ class authController {
 
       res.send({
         status: 'ok',
-        data: { categories, maxPrice, pages },
+        data: {
+          categories: categories.value,
+          maxPrice: maxPrice.value,
+          pages: pages.value,
+        },
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))
