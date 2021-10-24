@@ -1,6 +1,10 @@
 import { Router } from 'express'
 import { checkAccessTokenMiddleware } from '../../middleware'
-import { UserController, AdminController } from '../../controllers'
+import {
+  UserController,
+  AdminController,
+  OrderController,
+} from '../../controllers'
 import { fileLoaderService } from '../../services'
 
 const router = Router()
@@ -29,6 +33,12 @@ router.post(
 )
 
 router.post(
+  '/update-order',
+  checkAccessTokenMiddleware,
+  AdminController.updateOrder,
+)
+
+router.post(
   '/update-user-password',
   checkAccessTokenMiddleware,
   AdminController.changePassword,
@@ -47,5 +57,7 @@ router.post(
 )
 
 router.get('/user/:id', UserController.getUserById)
+
+router.get('/order/:id', OrderController.getOrderById)
 
 export const adminRouter = router

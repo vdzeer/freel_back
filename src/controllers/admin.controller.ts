@@ -260,6 +260,24 @@ class adminController {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))
     }
   }
+
+  async updateOrder(req, res, next) {
+    try {
+      const updatedOrder = await orderService.updateOrderByParams(
+        { _id: req.body.id },
+        {
+          ...req.body,
+        },
+      )
+
+      res.send({
+        status: 'ok',
+        data: updatedOrder,
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
 }
 
 export const AdminController = new adminController()
