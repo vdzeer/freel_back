@@ -1,7 +1,7 @@
 export type TOrder = {
   _id: string
-  customer: string
-  executor: string | null
+  customer: string | any
+  executor: any | null
   title: string
   description: string
   createdAt: Date
@@ -15,4 +15,5 @@ export type TOrder = {
   responses: Array<any>
   active: boolean
   confirmed: boolean
+  status?: 'in work' | 'finished' | 'declined'
 }

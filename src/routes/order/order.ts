@@ -29,6 +29,12 @@ router.post(
 )
 
 router.post(
+  '/decline-executor',
+  checkAccessTokenMiddleware,
+  OrderController.declineExecutor,
+)
+
+router.post(
   '/add-response',
   checkAccessTokenMiddleware,
   OrderController.addResponse,

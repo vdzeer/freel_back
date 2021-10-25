@@ -23,6 +23,11 @@ const Order = new Schema<TOrder>({
   responses: { type: Array, required: false },
   active: { type: Boolean, required: true },
   confirmed: { type: Boolean, required: true },
+  status: {
+    type: String || null,
+    enum: ['in work', 'finished', 'declined'],
+    required: false,
+  },
 })
 
 export const OrderModel = model('Orders', Order)

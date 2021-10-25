@@ -8,8 +8,15 @@ class OrderService {
     return orderToCreate.save()
   }
 
-  findAll(skip?, limit?): Promise<TOrder[]> {
+  findOrders(skip?, limit?): Promise<TOrder[]> {
     return OrderModel.find({ active: true, confirmed: true })
+      .populate('customer')
+      .lean()
+      .exec()
+  }
+
+  findAll(skip?, limit?): Promise<TOrder[]> {
+    return OrderModel.find({ active: true, confirmed: true, status: undefined })
       .populate('customer')
       .lean()
       .exec()
@@ -27,7 +34,7 @@ class OrderService {
   }
 
   findYourself(customerId, skip?, limit?): Promise<TOrder[]> {
-    return OrderModel.find({ customer: customerId })
+    return OrderModel.find({ customer: customerId, status: undefined })
       .populate('customer')
       .lean()
       .exec()
@@ -41,7 +48,7 @@ class OrderService {
   }
 
   findById(id: string): TOrder {
-    return OrderModel.findById(id).lean().exec()
+    return OrderModel.findById(id).populate('customer').lean().exec()
   }
 
   deleteOrder(id: string): void {

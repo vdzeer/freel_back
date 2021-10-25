@@ -13,6 +13,10 @@ router.get('/get-all-users', AdminController.getAllUsers)
 
 router.get('/get-all-orders/:reverse?', AdminController.getAllOrders)
 
+router.get('/get-info', AdminController.getEnums)
+
+router.get('/get-max', AdminController.getMax)
+
 router.post(
   '/confirm-order',
   checkAccessTokenMiddleware,
@@ -60,6 +64,12 @@ router.post(
   '/set-order-query',
   checkAccessTokenMiddleware,
   AdminController.setOrderQuery,
+)
+
+router.post(
+  '/set-max-price',
+  checkAccessTokenMiddleware,
+  AdminController.setMaxPrice,
 )
 
 router.post(

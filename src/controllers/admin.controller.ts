@@ -306,6 +306,27 @@ class adminController {
     }
   }
 
+  async setMaxPrice(req, res, next) {
+    try {
+      const maxPrice = await enumService.findOneByParams({
+        name: 'maxPrice',
+      })
+
+      await enumService.updateByParams(
+        { name: 'maxPrice' },
+        {
+          value: { ...maxPrice.value, ...req.body.data },
+        },
+      )
+
+      res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
   async deleteOrder(req, res, next) {
     try {
       await orderService.deleteOrder(req.body.id)
@@ -330,6 +351,36 @@ class adminController {
       res.send({
         status: 'ok',
         data: updatedOrder,
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async getEnums(req, res, next) {
+    try {
+      const pages = await enumService.findOneByParams({ name: 'infoPages' })
+
+      res.send({
+        status: 'ok',
+        data: {
+          pages: pages.value,
+        },
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async getMax(req, res, next) {
+    try {
+      const maxPrice = await enumService.findOneByParams({ name: 'maxPrice' })
+
+      res.send({
+        status: 'ok',
+        data: {
+          prices: maxPrice.value,
+        },
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))

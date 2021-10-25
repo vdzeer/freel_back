@@ -119,9 +119,30 @@ class authController {
 
       const orders = await orderService.findYourself(user._id)
 
+      const userOrders = await orderService.findOrders()
+
       res.send({
         status: 'ok',
-        data: { ...user, feedbacks, orders },
+        data: {
+          ...user,
+          feedbacks,
+          orders,
+          requests: userOrders.filter(
+            el =>
+              el.responses.findIndex(resp =>
+                resp?.executor?._id?.equals(user._id),
+              ) != -1,
+          ),
+          deals: userOrders.filter(
+            el =>
+              (user.role === 'worker'
+                ? el?.executor?.equals(user._id)
+                : el?.customer._id?.equals(user._id)) &&
+              (el.status === 'declined' ||
+                el.status === 'finished' ||
+                el.status === 'in work'),
+          ),
+        },
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))

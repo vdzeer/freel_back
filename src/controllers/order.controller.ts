@@ -1,6 +1,6 @@
-import { StatusCodes } from 'http-status-codes'
+import { StatusCodes, TOO_MANY_REQUESTS } from 'http-status-codes'
 import { ErrorHandler, errors } from '../errors'
-import { orderService, userService } from '../services'
+import { enumService, orderService, userService } from '../services'
 
 class orderController {
   async getOrderById(req, res, next) {
@@ -18,9 +18,18 @@ class orderController {
         )
       }
 
+      const ordersQuery = await enumService.findOneByParams({
+        name: 'ordersQuery',
+      })
+
+      let index = null
+      for (let key in ordersQuery?.value) {
+        if (ordersQuery.value[key] == order._id) index = key
+      }
+
       res.send({
         status: 'ok',
-        data: order,
+        data: { ...order, position: index },
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))
@@ -122,7 +131,53 @@ class orderController {
 
       const updatedOrder = await orderService.updateOrderByParams(
         { _id: id },
-        { executor: userId, responses: [] },
+        { executor: userId, responses: [], status: 'in work' },
+      )
+
+      await res.send({
+        status: 'ok',
+        data: updatedOrder,
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async declineExecutor(req, res, next) {
+    try {
+      const { id, userId } = req.body
+
+      const user = await userService.findById(req.user.id)
+
+      if (user.role !== 'customer') {
+        return next(
+          new ErrorHandler(
+            StatusCodes.BAD_REQUEST,
+            errors.MUST_BE_CUSTOMER.message,
+            errors.MUST_BE_CUSTOMER.code,
+          ),
+        )
+      }
+
+      const order = await orderService.findById(id)
+
+      if (!order) {
+        return next(
+          new ErrorHandler(
+            StatusCodes.NOT_FOUND,
+            errors.ORDER_NOT_FOUNT.message,
+            errors.ORDER_NOT_FOUNT.code,
+          ),
+        )
+      }
+
+      const updatedOrder = await orderService.updateOrderByParams(
+        { _id: id },
+        {
+          responses: order.responses.map(el =>
+            el.executor._id == userId ? { ...el, declined: true } : el,
+          ),
+        },
       )
 
       await res.send({
@@ -141,6 +196,8 @@ class orderController {
 
       const order = await orderService.findById(id)
 
+      const user = await userService.findById(req.user.id)
+
       if (!order) {
         return next(
           new ErrorHandler(
@@ -157,7 +214,7 @@ class orderController {
           responses: [
             ...order.responses,
             {
-              executor: req.user.id,
+              executor: user,
               description,
               budgetMin,
               budgetMax,
