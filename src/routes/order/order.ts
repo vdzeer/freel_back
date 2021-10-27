@@ -35,6 +35,18 @@ router.post(
 )
 
 router.post(
+  '/confirm-order',
+  checkAccessTokenMiddleware,
+  OrderController.confirmOrder,
+)
+
+router.post(
+  '/decline-order',
+  checkAccessTokenMiddleware,
+  OrderController.declineOrder,
+)
+
+router.post(
   '/add-response',
   checkAccessTokenMiddleware,
   OrderController.addResponse,

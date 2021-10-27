@@ -234,6 +234,100 @@ class orderController {
     }
   }
 
+  async confirmOrder(req, res, next) {
+    try {
+      const { id } = req.body
+
+      const user = await userService.findById(req.user.id)
+
+      if (user.role !== 'customer') {
+        return next(
+          new ErrorHandler(
+            StatusCodes.BAD_REQUEST,
+            errors.MUST_BE_CUSTOMER.message,
+            errors.MUST_BE_CUSTOMER.code,
+          ),
+        )
+      }
+
+      const order = await orderService.findById(id)
+
+      if (!order) {
+        return next(
+          new ErrorHandler(
+            StatusCodes.NOT_FOUND,
+            errors.ORDER_NOT_FOUNT.message,
+            errors.ORDER_NOT_FOUNT.code,
+          ),
+        )
+      }
+
+      await orderService.updateOrderByParams(
+        { _id: id },
+        { status: 'finished' },
+      )
+
+      const executor = await userService.findById(order.executor._id)
+
+      await userService.updateUserByParams(
+        { _id: executor._id },
+        { cash: executor.cash + order.price },
+      )
+
+      await userService.updateUserByParams(
+        { _id: user._id },
+        { cash: user.cash - order.price },
+      )
+
+      await res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async declineOrder(req, res, next) {
+    try {
+      const { id } = req.body
+
+      const user = await userService.findById(req.user.id)
+
+      if (user.role !== 'customer') {
+        return next(
+          new ErrorHandler(
+            StatusCodes.BAD_REQUEST,
+            errors.MUST_BE_CUSTOMER.message,
+            errors.MUST_BE_CUSTOMER.code,
+          ),
+        )
+      }
+
+      const order = await orderService.findById(id)
+
+      if (!order) {
+        return next(
+          new ErrorHandler(
+            StatusCodes.NOT_FOUND,
+            errors.ORDER_NOT_FOUNT.message,
+            errors.ORDER_NOT_FOUNT.code,
+          ),
+        )
+      }
+
+      await orderService.updateOrderByParams(
+        { _id: id },
+        { status: 'declined' },
+      )
+
+      await res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
   async deactivateActivateOrder(req, res, next) {
     try {
       const { id } = req.body
@@ -249,7 +343,7 @@ class orderController {
         )
       }
 
-      if (order.customer != req.user.id) {
+      if (order.customer._id != req.user.id) {
         return next(
           new ErrorHandler(
             StatusCodes.BAD_REQUEST,
@@ -287,7 +381,7 @@ class orderController {
         )
       }
 
-      if (order.customer != req.user.id) {
+      if (order.customer._id != req.user.id) {
         return next(
           new ErrorHandler(
             StatusCodes.BAD_REQUEST,
