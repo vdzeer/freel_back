@@ -151,7 +151,9 @@ class authController {
 
   async getAllUsers(req, res, next) {
     try {
-      const users = await userService.findAll()
+      const { spec, premium } = req.query
+
+      const users = await userService.findAllSort(spec, !!premium)
 
       res.send({
         status: 'ok',

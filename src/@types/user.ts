@@ -22,4 +22,5 @@ export type User = {
   rate: number
   feedbacks: Array<TFeedback>
   blocked: boolean
+  online?: boolean
 }

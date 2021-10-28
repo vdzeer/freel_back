@@ -13,29 +13,9 @@ export const checkAccessTokenMiddleware = async (
   try {
     let token = req.get('Authorization')
 
-    if (!token) {
-      return next(
-        new ErrorHandler(
-          StatusCodes.UNAUTHORIZED,
-          errors.INVALID_TOKEN.message,
-          errors.INVALID_TOKEN.code,
-        ),
-      )
-    }
-
     token = token.split(' ')[1]
 
     const decodedData = jwt.verify(token, config.JWT_SECRET)
-
-    if (!decodedData) {
-      return next(
-        new ErrorHandler(
-          StatusCodes.NOT_FOUND,
-          errors.USER_NOT_FOUND.message,
-          errors.USER_NOT_FOUND.code,
-        ),
-      )
-    }
 
     req.user = decodedData
     req.token = token

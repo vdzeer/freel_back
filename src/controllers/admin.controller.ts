@@ -6,6 +6,7 @@ import {
   orderService,
   adminService,
   userService,
+  nodemailerService,
 } from '../services'
 import { config } from '../config'
 
@@ -117,6 +118,87 @@ class adminController {
           status: 'ok',
           data: usersList,
         })
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async resetPasswordQuery(req, res, next) {
+    try {
+      const { email } = req.body
+      const code = Math.round(Math.random() * 99999)
+
+      const admin = await adminService.findOneByParams({ email })
+
+      if (!admin) {
+        return next(
+          new ErrorHandler(
+            StatusCodes.NOT_FOUND,
+            errors.ADMIN_EMAIL_NOT_FOUND.message,
+            errors.ADMIN_EMAIL_NOT_FOUND.code,
+          ),
+        )
+      }
+
+      const message = {
+        to: email,
+        subject: `Смена пароля - FreeL`,
+        html: `
+          <h2>Для смены пароля перейдите по ссылке: ${code}</h2>
+        `,
+      }
+
+      nodemailerService(message)
+
+      await adminService.updateByParams(
+        { email: email },
+        { activateCode: code.toString() },
+      )
+
+      res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async resetPasswordConfirm(req, res, next) {
+    try {
+      const { email, code, password } = req.body
+
+      const admin = await adminService.findOneByParams({ email })
+
+      if (!admin) {
+        return next(
+          new ErrorHandler(
+            StatusCodes.NOT_FOUND,
+            errors.ADMIN_EMAIL_NOT_FOUND.message,
+            errors.ADMIN_EMAIL_NOT_FOUND.code,
+          ),
+        )
+      }
+
+      if (admin.activateCode != code) {
+        return next(
+          new ErrorHandler(
+            StatusCodes.NOT_FOUND,
+            errors.ADMIN_EMAIL_NOT_FOUND.message,
+            errors.ADMIN_EMAIL_NOT_FOUND.code,
+          ),
+        )
+      }
+
+      const hashPassword = await bcrypt.hash(password, 7)
+
+      await adminService.updateByParams(
+        { email: email },
+        { activateCode: '', password: hashPassword },
+      )
+
+      res.send({
+        status: 'ok',
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))
@@ -240,6 +322,61 @@ class adminController {
                 return Number(a.garant) - Number(b.garant)
               }),
         },
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async getOrders(req, res, next) {
+    try {
+      const { query } = req.params
+
+      const activeOrders = await orderService.findByName(query)
+
+      const unconfirmedOrders = await orderService.findByNameUn(query)
+
+      const archivedOrders = await orderService.findByNameAr(query)
+
+      res.send({
+        status: 'ok',
+        data: {
+          activeOrders,
+          unconfirmedOrders,
+          archivedOrders,
+        },
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async getUsers(req, res, next) {
+    try {
+      const { query } = req.params
+
+      const users = await userService.findByName(query)
+
+      const getOwnOrders = async item => {
+        return await orderService.findYourself(item)
+      }
+
+      const getData = async () => {
+        return Promise.all(users.map(item => getOwnOrders(item._id)))
+      }
+
+      getData().then(data => {
+        const usersList = users.map((el, index) => {
+          return {
+            ...el,
+            ordersLength: data[index].length,
+          }
+        })
+
+        res.send({
+          status: 'ok',
+          data: usersList,
+        })
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))

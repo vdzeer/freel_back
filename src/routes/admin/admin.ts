@@ -13,6 +13,10 @@ router.get('/get-all-users', AdminController.getAllUsers)
 
 router.get('/get-all-orders/:reverse?', AdminController.getAllOrders)
 
+router.get('/get-orders/:query?', AdminController.getOrders)
+
+router.get('/get-users/:query?', AdminController.getUsers)
+
 router.get('/get-info', AdminController.getEnums)
 
 router.get('/get-max', AdminController.getMax)

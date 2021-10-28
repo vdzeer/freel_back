@@ -7,7 +7,7 @@ import { OrderController } from '../../controllers'
 
 const router = Router()
 
-router.get('/getAll', OrderController.getAll)
+router.get('/getAll', OrderController.getAllOrders)
 
 router.post(
   '/update',

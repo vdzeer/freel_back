@@ -35,6 +35,10 @@ export const errors = {
     message: 'This user is blocked',
     code: 'USER_BLOCKED',
   },
+  ADMIN_CODE_NOT_EQUAL: {
+    message: 'Admin code not equal',
+    code: 'ADMIN_CODE_NOT_EQUAL',
+  },
 
   //401
   UNAUTHORIZED_BAD_TOKEN: {

@@ -21,6 +21,7 @@ const User = new Schema<User>({
   country: { type: String, required: false },
   feedbacksLength: { type: Number, required: false },
   blocked: { type: Boolean, required: true },
+  online: { type: Boolean, required: false },
   premiumStatus: {
     type: String,
     enum: ['1', '2', '3'],

@@ -1,5 +1,6 @@
 export * from './enum.service'
 export * from './file-loader'
+export * from './nodemailer'
 export * from './feedback'
 export * from './admin'
 export * from './order'

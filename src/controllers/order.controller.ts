@@ -400,6 +400,27 @@ class orderController {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))
     }
   }
+
+  async getAllOrders(req, res, next) {
+    try {
+      const { min, max, spec, premium, garant } = req.query
+
+      const users = await orderService.findAllSort(
+        min,
+        max,
+        spec,
+        !!premium,
+        !!garant,
+      )
+
+      res.send({
+        status: 'ok',
+        data: users,
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
 }
 
 export const OrderController = new orderController()

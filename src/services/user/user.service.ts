@@ -23,6 +23,26 @@ class UserService {
     return UserModel.find().lean().exec()
   }
 
+  findAllSort(spec, premium): Promise<User[]> {
+    const findObj = {
+      [spec ? 'status' : undefined]: spec?.toString(),
+      [premium ? 'premiumStatus' : undefined]: premium
+        ? {
+            $regex: /1|2|3/gm,
+          }
+        : undefined,
+    }
+
+    return UserModel.find(findObj).lean().exec()
+  }
+
+  findByName(name): Promise<User[]> {
+    const regex = `^${name}`
+    return UserModel.find({ name: { $regex: regex, $options: 'i' } })
+      .lean()
+      .exec()
+  }
+
   findById(id: string, skip?, limit?): Promise<User> {
     return UserModel.findById(id).lean().exec()
   }

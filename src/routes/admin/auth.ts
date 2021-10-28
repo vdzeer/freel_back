@@ -20,5 +20,14 @@ router.post(
   checkIsAdminExistMiddleware,
   AdminController.login,
 )
+router.post(
+  '/send-code',
+  checkIsAdminExistMiddleware,
+  AdminController.resetPasswordQuery,
+)
+router.post(
+  '/reset-password',
+  AdminController.resetPasswordConfirm,
+)
 
 export const authRouter = router
