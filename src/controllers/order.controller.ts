@@ -1,3 +1,4 @@
+import { TOrder } from './../@types/order'
 import { StatusCodes, TOO_MANY_REQUESTS } from 'http-status-codes'
 import { ErrorHandler, errors } from '../errors'
 import { enumService, orderService, userService } from '../services'
@@ -405,7 +406,7 @@ class orderController {
     try {
       const { min, max, spec, premium, garant } = req.query
 
-      const users = await orderService.findAllSort(
+      const orders = await orderService.findAllSort(
         min,
         max,
         spec,
@@ -413,9 +414,38 @@ class orderController {
         !!garant,
       )
 
-      res.send({
-        status: 'ok',
-        data: users,
+      const ordersQuery = await enumService.findOneByParams({
+        name: 'ordersQuery',
+      })
+
+      const getOrders = async item => {
+        return await orderService.findById(item)
+      }
+
+      const getData = async () => {
+        return Promise.all(
+          Object.values(ordersQuery?.value).map(item =>
+            item ? getOrders(item) : undefined,
+          ),
+        )
+      }
+
+      getData().then(data => {
+        res.send({
+          status: 'ok',
+          data: [
+            ...data.filter(
+              (el: TOrder) =>
+                el &&
+                (premium ? el.premium == premium : true) &&
+                (garant ? el.garant == garant : true) &&
+                (spec ? el.spec == spec : true) &&
+                (min ? +el?.price >= min : true) &&
+                (max ? +el?.price <= max : true),
+            ),
+            ...orders,
+          ],
+        })
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))

@@ -47,10 +47,10 @@ class authController {
         blocked: false,
         description: '',
         feedbacksLength: 0,
-        premiumStatus: null,
         inWorkStatus: false,
         createdAt: new Date(),
         password: hashPassword,
+        premiumStatus: undefined,
       })
 
       const newUser = await userService.findById(user._id)
