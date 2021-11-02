@@ -20,7 +20,7 @@ class UserService {
   }
 
   findAll(skip?, limit?): Promise<User[]> {
-    return UserModel.find().lean().exec()
+    return UserModel.find().sort({ createdAt: -1 }).lean().exec()
   }
 
   findAllSort(spec, premium): Promise<User[]> {
@@ -33,12 +33,13 @@ class UserService {
         : undefined,
     }
 
-    return UserModel.find(findObj).lean().exec()
+    return UserModel.find(findObj).sort({ createdAt: -1 }).lean().exec()
   }
 
   findByName(name): Promise<User[]> {
-    const regex = `^${name}`
+    const regex = `*${name}*`
     return UserModel.find({ name: { $regex: regex, $options: 'i' } })
+      .sort({ createdAt: -1 })
       .lean()
       .exec()
   }

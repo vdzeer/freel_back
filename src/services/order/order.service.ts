@@ -10,6 +10,7 @@ class OrderService {
 
   findOrders(skip?, limit?): Promise<TOrder[]> {
     return OrderModel.find({ active: true, confirmed: true })
+      .sort({ createdAt: -1 })
       .populate('customer')
       .lean()
       .exec()
@@ -17,6 +18,7 @@ class OrderService {
 
   findAll(skip?, limit?): Promise<TOrder[]> {
     return OrderModel.find({ active: true, confirmed: true, status: undefined })
+      .sort({ createdAt: -1 })
       .populate('customer')
       .lean()
       .exec()
@@ -42,41 +44,44 @@ class OrderService {
       status: undefined,
       ...findObj,
     })
-      .populate('customer')
+      .sort({ createdAt: -1 })
       .lean()
       .exec()
   }
 
   findByName(name): Promise<TOrder[]> {
-    const regex = `^${name}`
+    const regex = `*${name}*`
     return OrderModel.find({
       active: true,
       confirmed: true,
       status: undefined,
       title: { $regex: regex, $options: 'i' },
     })
+      .sort({ createdAt: -1 })
       .populate('customer')
       .lean()
       .exec()
   }
 
   findByNameUn(name): Promise<TOrder[]> {
-    const regex = `^${name}`
+    const regex = `*${name}*`
     return OrderModel.find({
       confirmed: false,
       title: { $regex: regex, $options: 'i' },
     })
+      .sort({ createdAt: -1 })
       .populate('customer')
       .lean()
       .exec()
   }
 
   findByNameAr(name): Promise<TOrder[]> {
-    const regex = `^${name}`
+    const regex = `*${name}*`
     return OrderModel.find({
       active: false,
       title: { $regex: regex, $options: 'i' },
     })
+      .sort({ createdAt: -1 })
       .populate('customer')
       .lean()
       .exec()
@@ -84,17 +89,23 @@ class OrderService {
 
   findUnconfirmed(skip?, limit?): Promise<TOrder[]> {
     return OrderModel.find({ confirmed: false })
+      .sort({ createdAt: -1 })
       .populate('customer')
       .lean()
       .exec()
   }
 
   findArchive(skip?, limit?): Promise<TOrder[]> {
-    return OrderModel.find({ active: false }).populate('customer').lean().exec()
+    return OrderModel.find({ active: false })
+      .sort({ createdAt: -1 })
+      .populate('customer')
+      .lean()
+      .exec()
   }
 
   findYourself(customerId, skip?, limit?): Promise<TOrder[]> {
     return OrderModel.find({ customer: customerId, status: undefined })
+      .sort({ createdAt: -1 })
       .populate('customer')
       .lean()
       .exec()

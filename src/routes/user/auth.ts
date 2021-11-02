@@ -23,7 +23,6 @@ router.post(
 
 router.post(
   '/send-code',
-  checkIsUserExistMiddleware,
   UserController.resetPasswordQuery,
 )
 router.post('/reset-password', UserController.resetPasswordConfirm)

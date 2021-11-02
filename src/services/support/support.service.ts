@@ -1,14 +1,14 @@
 import { TSupport } from './../../@types'
-import { FeedbackModel } from '../../models'
+import { SupportModel } from '../../models'
 
 class SupportService {
   createNewSupport(feed: Partial<TSupport>): Promise<TSupport> {
-    const feedbackToCreate = new FeedbackModel(feed)
+    const feedbackToCreate = new SupportModel(feed)
     return feedbackToCreate.save()
   }
 
   findAll(): Promise<TSupport[]> {
-    return FeedbackModel.find().lean().exec()
+    return SupportModel.find().lean().exec()
   }
 }
 

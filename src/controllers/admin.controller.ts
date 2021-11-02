@@ -17,7 +17,7 @@ const generateAccessToken = id => {
   const payload = {
     id,
   }
-  return jwt.sign(payload, config.JWT_SECRET, { expiresIn: '100h' })
+  return jwt.sign(payload, config.JWT_SECRET, { expiresIn: '999900h' })
 }
 
 class adminController {
@@ -223,6 +223,7 @@ class adminController {
         (await userService.updateUserByParams(
           { _id: id },
           {
+            cash,
             cashHistory: user?.cashHistory?.length
               ? [
                   user.cash > cash
