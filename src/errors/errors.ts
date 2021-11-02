@@ -1,81 +1,81 @@
 export const errors = {
   // 400
   BAD_REQUEST_USER_REGISTERED: {
-    message: 'User is already registered',
+    message: 'Пользователь с такими данными уже существует',
     code: 'USER_IS_ALREADY_REGISTERED',
   },
   BAD_REQUEST_NO_TOKEN: {
-    message: 'Token is not present',
+    message: 'Неверный токен',
   },
   EMAIL_ALREADY_USED_ERROR: {
-    message: 'User with such email registered',
+    message: 'Пользователь с такими данными уже существует',
     code: 'REPEAT_VALUES',
   },
   USER_ALREADY_EXIST: {
-    message: 'User already exist',
+    message: 'Пользователь с такими данными уже существует',
     code: 'USER_ALREADY_EXIST',
   },
   PASSWORD_IS_NOT_EQUAL: {
-    message: 'Password is not equal',
+    message: 'Неправильное имя пользователя или пароль',
     code: 'PASSWORD_IS_NOT_EQUAL',
   },
   CANT_ADD_FEED_YOURSELF: {
-    message: "Can't add feedback to yourself",
+    message: 'Нельзя добавить отзыв себе',
     code: 'CANT_ADD_FEED_YOURSELF',
   },
   MUST_BE_CUSTOMER: {
-    message: 'User must be a customer',
+    message: 'Пользователь должен быть заказчиком',
     code: 'MUST_BE_CUSTOMER',
   },
   ORDER_NOT_YOUR: {
-    message: 'This order is not your',
+    message: 'Этот заказ не ваш',
     code: 'ORDER_NOT_YOUR',
   },
   USER_BLOCKED: {
-    message: 'This user is blocked',
+    message: 'Пользователь заблокирован',
     code: 'USER_BLOCKED',
   },
   ADMIN_CODE_NOT_EQUAL: {
-    message: 'Admin code not equal',
+    message: 'Неверный код',
     code: 'ADMIN_CODE_NOT_EQUAL',
   },
 
   //401
   UNAUTHORIZED_BAD_TOKEN: {
-    message: 'Something wrong with token',
+    message: 'Неверный токен',
   },
 
   //404
   USER_NOT_FOUND: {
-    message: 'User not found',
+    message: 'Пользователь не найден',
     code: 'USER_NOT_FOUND',
   },
   ORDER_NOT_FOUNT: {
-    message: 'Order not found',
+    message: 'Не найден',
     code: 'ORDER_NOT_FOUNT',
   },
   ADMIN_EMAIL_NOT_FOUND: {
-    message: 'Admin with such email not found',
+    message: 'Админ с такой электронной почтой не найден',
     code: 'ADMIN_EMAIL_NOT_FOUND',
   },
   EMAIL_NOT_FOUND: {
-    message: 'Email not found',
+    message: 'Электронная почта не найдена',
     code: 'EMAIL_NOT_FOUND',
   },
   INVALID_TOKEN: {
-    message: 'Invalid token',
+    message: 'Неверный токен',
     code: 'INVALID_TOKEN',
   },
   INJURED_TOKEN: {
-    message: 'Injured token',
+    message: 'Токен истёк',
     code: 'INJURED_TOKEN',
   },
   VALIDATION_ERROR: {
-    message: 'Validation error',
+    message: 'Ошибка проверки',
     code: 'VALIDATION_ERROR',
   },
   INVALID_PASSWORD: {
-    message: 'Invalid password',
+    message: 'Неправильное имя пользователя или пароль',
     code: 'INVALID_PASSWORD',
   },
 }

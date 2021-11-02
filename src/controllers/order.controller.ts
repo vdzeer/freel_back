@@ -272,12 +272,51 @@ class orderController {
 
       await userService.updateUserByParams(
         { _id: executor._id },
-        { cash: executor.cash + order.price },
+        {
+          cash: executor.cash + order.price,
+          cashHistory: executor?.cashHistory?.length
+            ? [
+                {
+                  title: 'Получение оплаты за работу:',
+                  createdAt: new Date(),
+                  cash: order.price,
+                  status: 'add',
+                },
+                ...executor.cashHistory,
+              ]
+            : [
+                {
+                  title: 'Получение оплаты за работу:',
+                  createdAt: new Date(),
+                  cash: order.price,
+                  status: 'add',
+                },
+              ],
+        },
       )
-
       await userService.updateUserByParams(
         { _id: user._id },
-        { cash: user.cash - order.price },
+        {
+          cash: user.cash - order.price,
+          cashHistory: user?.cashHistory?.length
+            ? [
+                {
+                  title: 'Оплата труда:',
+                  createdAt: new Date(),
+                  cash: order.price,
+                  status: 'del',
+                },
+                ...user.cashHistory,
+              ]
+            : [
+                {
+                  title: 'Оплата труда:',
+                  createdAt: new Date(),
+                  cash: order.price,
+                  status: 'del',
+                },
+              ],
+        },
       )
 
       await res.send({

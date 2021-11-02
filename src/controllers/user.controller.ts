@@ -4,11 +4,12 @@ import { ErrorHandler, errors } from '../errors'
 import {
   enumService,
   feedbackService,
+  nodemailerService,
   orderService,
+  supportService,
   userService,
 } from '../services'
 import { config } from '../config'
-import { Types } from 'mongoose'
 
 const jwt = require('jsonwebtoken')
 
@@ -289,6 +290,102 @@ class authController {
       res.send({
         status: 'ok',
         data: feedback,
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async createSupport(req, res, next) {
+    try {
+      await supportService.createNewSupport({
+        ...req.body,
+        createdAt: new Date(),
+      })
+
+      res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async resetPasswordQuery(req, res, next) {
+    try {
+      const { email } = req.body
+      const code = Math.round(Math.random() * 99999)
+
+      const admin = await userService.findOneByParams({ email })
+
+      if (!admin) {
+        return next(
+          new ErrorHandler(
+            StatusCodes.NOT_FOUND,
+            errors.EMAIL_NOT_FOUND.message,
+            errors.EMAIL_NOT_FOUND.code,
+          ),
+        )
+      }
+
+      const message = {
+        to: email,
+        subject: `Смена пароля - FreeL`,
+        html: `
+          <h2>Код для смены пароля: ${code}</h2>
+        `,
+      }
+
+      nodemailerService(message)
+
+      await userService.updateUserByParams(
+        { email: email },
+        { activateCode: code.toString() },
+      )
+
+      res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async resetPasswordConfirm(req, res, next) {
+    try {
+      const { email, code, password } = req.body
+
+      const user = await userService.findOneByParams({ email })
+
+      if (!user) {
+        return next(
+          new ErrorHandler(
+            StatusCodes.NOT_FOUND,
+            errors.EMAIL_NOT_FOUND.message,
+            errors.EMAIL_NOT_FOUND.code,
+          ),
+        )
+      }
+
+      if (user.activateCode != code) {
+        return next(
+          new ErrorHandler(
+            StatusCodes.NOT_FOUND,
+            errors.ADMIN_CODE_NOT_EQUAL.message,
+            errors.ADMIN_CODE_NOT_EQUAL.code,
+          ),
+        )
+      }
+
+      const hashPassword = await bcrypt.hash(password, 7)
+
+      await userService.updateUserByParams(
+        { email: email },
+        { activateCode: '', password: hashPassword },
+      )
+
+      res.send({
+        status: 'ok',
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))

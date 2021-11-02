@@ -28,6 +28,8 @@ router.post(
   UserController.changePassword,
 )
 
+router.post('/create-support', UserController.createSupport)
+
 router.post(
   '/create-feedback',
   checkAccessTokenMiddleware,

@@ -21,4 +21,11 @@ router.post(
   UserController.login,
 )
 
+router.post(
+  '/send-code',
+  checkIsUserExistMiddleware,
+  UserController.resetPasswordQuery,
+)
+router.post('/reset-password', UserController.resetPasswordConfirm)
+
 export const authRouter = router

@@ -7,6 +7,7 @@ import {
   adminService,
   userService,
   nodemailerService,
+  supportService,
 } from '../services'
 import { config } from '../config'
 
@@ -207,7 +208,7 @@ class adminController {
 
   async updateUserById(req, res, next) {
     try {
-      const { id, ...other } = req.body
+      const { id, cash, ...other } = req.body
 
       await userService.updateUserByParams(
         { _id: id },
@@ -215,6 +216,47 @@ class adminController {
           ...other,
         },
       )
+
+      const user = await userService.findById(id)
+
+      cash &&
+        (await userService.updateUserByParams(
+          { _id: id },
+          {
+            cashHistory: user?.cashHistory?.length
+              ? [
+                  user.cash > cash
+                    ? {
+                        title: 'Вывод средств:',
+                        createdAt: new Date(),
+                        cash: Math.abs(user.cash - cash),
+                        status: 'del',
+                      }
+                    : {
+                        title: 'Пополнение счёта:',
+                        createdAt: new Date(),
+                        cash: Math.abs(user.cash - cash),
+                        status: 'add',
+                      },
+                  ...user.cashHistory,
+                ]
+              : [
+                  user.cash > cash
+                    ? {
+                        title: 'Вывод средств:',
+                        createdAt: new Date(),
+                        cash: Math.abs(user.cash - cash),
+                        status: 'del',
+                      }
+                    : {
+                        title: 'Пополнение счёта:',
+                        createdAt: new Date(),
+                        cash: Math.abs(user.cash - cash),
+                        status: 'add',
+                      },
+                ],
+          },
+        ))
 
       req?.file &&
         (await userService.updateUserByParams(
@@ -518,6 +560,19 @@ class adminController {
         data: {
           prices: maxPrice.value,
         },
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async getAllSupports(req, res, next) {
+    try {
+      const supports = await supportService.findAll()
+
+      res.send({
+        status: 'ok',
+        data: supports,
       })
     } catch (err) {
       return next(new ErrorHandler(err?.status, err?.code, err?.message))

@@ -11,6 +11,8 @@ const router = Router()
 
 router.get('/get-all-users', AdminController.getAllUsers)
 
+router.get('/get-supports', AdminController.getAllSupports)
+
 router.get('/get-all-orders/:reverse?', AdminController.getAllOrders)
 
 router.get('/get-orders/:query?', AdminController.getOrders)

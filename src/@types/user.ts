@@ -23,4 +23,6 @@ export type User = {
   feedbacks: Array<TFeedback>
   blocked: boolean
   online?: boolean
+  activateCode?: string
+  cashHistory?: Array<any>
 }
