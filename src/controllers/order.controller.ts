@@ -3,6 +3,7 @@ import { StatusCodes, TOO_MANY_REQUESTS } from 'http-status-codes'
 import { ErrorHandler, errors } from '../errors'
 import { enumService, orderService, userService } from '../services'
 import * as _ from 'lodash'
+import e from 'express'
 
 class orderController {
   async getOrderById(req, res, next) {
@@ -483,7 +484,9 @@ class orderController {
               (max ? +el?.price <= max : true),
           ),
           ...orders,
-        ]
+        ].filter(
+          el => orders.findIndex(z => String(z._id) === String(el._id)) !== -1,
+        )
 
         res.send({
           status: 'ok',
