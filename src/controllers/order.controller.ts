@@ -56,6 +56,7 @@ class orderController {
         { customer: req.user.id },
         {
           ...req.body,
+          createdAt: new Date(),
         },
       )
 
