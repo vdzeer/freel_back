@@ -14,6 +14,10 @@ class FeedbackService {
       .lean()
       .exec()
   }
+
+  deleteFeedback(id: string): void {
+    return FeedbackModel.findByIdAndDelete(id)
+  }
 }
 
 export const feedbackService = new FeedbackService()

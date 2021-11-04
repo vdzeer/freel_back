@@ -8,6 +8,7 @@ import {
   userService,
   nodemailerService,
   supportService,
+  feedbackService,
 } from '../services'
 import { config } from '../config'
 
@@ -510,6 +511,18 @@ class adminController {
   async deleteOrder(req, res, next) {
     try {
       await orderService.deleteOrder(req.body.id)
+
+      res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
+  async deleteFeedback(req, res, next) {
+    try {
+      await feedbackService.deleteFeedback(req.body.id)
 
       res.send({
         status: 'ok',

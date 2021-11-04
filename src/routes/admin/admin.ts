@@ -36,6 +36,12 @@ router.post(
 )
 
 router.post(
+  '/delete-feedback',
+  checkAccessTokenMiddleware,
+  AdminController.deleteFeedback,
+)
+
+router.post(
   '/update-user',
   fileLoaderService.file('avatar', /image\/(png|jpeg|giff)/, false),
   checkAccessTokenMiddleware,
