@@ -45,6 +45,7 @@ class OrderService {
       ...findObj,
     })
       .sort({ createdAt: -1 })
+      .populate('customer')
       .lean()
       .exec()
   }

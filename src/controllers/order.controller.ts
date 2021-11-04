@@ -2,6 +2,7 @@ import { TOrder } from './../@types/order'
 import { StatusCodes, TOO_MANY_REQUESTS } from 'http-status-codes'
 import { ErrorHandler, errors } from '../errors'
 import { enumService, orderService, userService } from '../services'
+import * as _ from 'lodash'
 
 class orderController {
   async getOrderById(req, res, next) {
@@ -471,20 +472,24 @@ class orderController {
       }
 
       getData().then(data => {
+        const arr = [
+          ...data.filter(
+            (el: TOrder) =>
+              el &&
+              (premium ? el.premium == premium : true) &&
+              (garant ? el.garant == garant : true) &&
+              (spec ? el.spec == spec : true) &&
+              (min ? +el?.price >= min : true) &&
+              (max ? +el?.price <= max : true),
+          ),
+          ...orders,
+        ]
+
         res.send({
           status: 'ok',
-          data: [
-            ...data.filter(
-              (el: TOrder) =>
-                el &&
-                (premium ? el.premium == premium : true) &&
-                (garant ? el.garant == garant : true) &&
-                (spec ? el.spec == spec : true) &&
-                (min ? +el?.price >= min : true) &&
-                (max ? +el?.price <= max : true),
-            ),
-            ...orders,
-          ],
+          data: _.uniqBy(arr, e => {
+            return String(e._id)
+          }),
         })
       })
     } catch (err) {
