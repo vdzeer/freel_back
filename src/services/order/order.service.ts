@@ -51,7 +51,7 @@ class OrderService {
   }
 
   findByName(name): Promise<TOrder[]> {
-    const regex = `*${name}*`
+    const regex = `^${name}`
     return OrderModel.find({
       active: true,
       confirmed: true,
@@ -65,7 +65,7 @@ class OrderService {
   }
 
   findByNameUn(name): Promise<TOrder[]> {
-    const regex = `*${name}*`
+    const regex = `^${name}`
     return OrderModel.find({
       confirmed: false,
       title: { $regex: regex, $options: 'i' },
@@ -77,7 +77,7 @@ class OrderService {
   }
 
   findByNameAr(name): Promise<TOrder[]> {
-    const regex = `*${name}*`
+    const regex = `^${name}`
     return OrderModel.find({
       active: false,
       title: { $regex: regex, $options: 'i' },

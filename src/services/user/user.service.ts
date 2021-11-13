@@ -37,7 +37,7 @@ class UserService {
   }
 
   findByName(name): Promise<User[]> {
-    const regex = `*${name}*`
+    const regex = `^${name}`
     return UserModel.find({ name: { $regex: regex, $options: 'i' } })
       .sort({ createdAt: -1 })
       .lean()
