@@ -8,6 +8,14 @@ class OrderService {
     return orderToCreate.save()
   }
 
+  findMyself(skip?, limit?): Promise<TOrder[]> {
+    return OrderModel.find({ confirmed: true })
+      .sort({ createdAt: -1 })
+      .populate('customer')
+      .lean()
+      .exec()
+  }
+
   findOrders(skip?, limit?): Promise<TOrder[]> {
     return OrderModel.find({ active: true, confirmed: true })
       .sort({ createdAt: -1 })

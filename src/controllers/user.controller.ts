@@ -120,7 +120,7 @@ class authController {
 
       const orders = await orderService.findYourself(user._id)
 
-      const userOrders = await orderService.findOrders()
+      const userOrders = await orderService.findMyself()
 
       res.send({
         status: 'ok',
