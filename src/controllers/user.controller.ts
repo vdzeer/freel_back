@@ -122,8 +122,6 @@ class authController {
 
       const userOrders = await orderService.findMyself()
 
-      // console.log(id, user, feedbacks, orders, userOrders)
-
       res.send({
         status: 'ok',
         data: {
@@ -140,7 +138,7 @@ class authController {
             el =>
               (user.role === 'worker'
                 ? el?.executor?.equals(user?._id ?? '')
-                : el?.customer._id?.equals(user?._id ?? '')) &&
+                : el?.customer?._id?.equals(user?._id ?? '')) &&
               (el.status === 'declined' ||
                 el.status === 'finished' ||
                 el.status === 'in work'),
