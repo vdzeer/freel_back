@@ -9,7 +9,7 @@ import { fileLoaderService } from '../../services'
 
 const router = Router()
 
-router.get('/getAll', userOnlineMiddleware, UserController.getAllUsers)
+router.get('/getAll', UserController.getAllUsers)
 router.get('/get-best', UserController.getBestUsers)
 router.get('/get-enums', UserController.getEnums)
 

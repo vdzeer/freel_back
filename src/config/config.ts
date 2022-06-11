@@ -15,7 +15,8 @@ export const config = {
   },
   MONGODB_URL:
     process.env.MONGODB_URL ||
-    'mongodb+srv://freel:freelhunter@cluster0.xxcjw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+    'mongodb+srv://freel:freelhunter@cluster0.wga2w.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+  // 'mongodb+srv://freel:freelhunter@cluster0.xxcjw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
 
   ROOT_EMAIL: process.env.ROOT_EMAIL || '',
   ROOT_EMAIL_PASSWORD: process.env.ROOT_EMAIL_PASSWORD || '',
