@@ -122,7 +122,7 @@ class authController {
 
       const userOrders = await orderService.findMyself()
 
-      console.log(id, user, feedbacks, orders, userOrders)
+      // console.log(id, user, feedbacks, orders, userOrders)
 
       res.send({
         status: 'ok',
@@ -130,21 +130,27 @@ class authController {
           ...user,
           feedbacks,
           orders,
-          requests: userOrders.filter(
-            el =>
-              el.responses.findIndex(resp =>
-                resp?.executor?._id?.equals(user._id),
-              ) != -1,
-          ),
-          deals: userOrders.filter(
-            el =>
-              (user.role === 'worker'
-                ? el?.executor?.equals(user._id)
-                : el?.customer._id?.equals(user._id)) &&
-              (el.status === 'declined' ||
-                el.status === 'finished' ||
-                el.status === 'in work'),
-          ),
+          requests:
+            user.role === 'customer'
+              ? []
+              : userOrders.filter(
+                  el =>
+                    el.responses.findIndex(resp =>
+                      resp?.executor?._id?.equals(user._id),
+                    ) != -1,
+                ),
+          deals:
+            user.role === 'customer'
+              ? []
+              : userOrders.filter(
+                  el =>
+                    (user.role === 'worker'
+                      ? el?.executor?.equals(user._id)
+                      : el?.customer._id?.equals(user._id)) &&
+                    (el.status === 'declined' ||
+                      el.status === 'finished' ||
+                      el.status === 'in work'),
+                ),
         },
       })
     } catch (err) {
