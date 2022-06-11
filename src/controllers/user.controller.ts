@@ -122,6 +122,8 @@ class authController {
 
       const userOrders = await orderService.findMyself()
 
+      console.log(id, user, feedbacks, orders, userOrders)
+
       res.send({
         status: 'ok',
         data: {
