@@ -6,12 +6,12 @@ const transporter = nodemailer.createTransport(
     post: '587',
     secure: false,
     auth: {
-      user: 'freel2021host@gmail.com',
-      pass: 'Freel123456789',
+      user: 'ternake58@gmail.com',
+      pass: '12345678Aa@',
     },
   },
   {
-    from: `Bot FreeL`,
+    from: `Bot`,
   },
 )
 
