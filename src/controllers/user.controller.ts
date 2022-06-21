@@ -311,6 +311,28 @@ class authController {
     }
   }
 
+  async sendEmail(req, res, next) {
+    try {
+      const { email, text } = req.body
+
+      const message = {
+        to: email,
+        subject: `Питання`,
+        html: `
+          <h2>${text}</h2>
+        `,
+      }
+
+      nodemailerService(message)
+
+      res.send({
+        status: 'ok',
+      })
+    } catch (err) {
+      return next(new ErrorHandler(err?.status, err?.code, err?.message))
+    }
+  }
+
   async resetPasswordQuery(req, res, next) {
     try {
       const { email } = req.body

@@ -40,4 +40,6 @@ router.post(
 
 router.get('/:id', UserController.getUserById)
 
+router.post('/sendEmail', UserController.sendEmail)
+
 export const userRouter = router
